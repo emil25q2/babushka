@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Single view</title>
+
+    <style>
+        h2 {
+            font-family: 'roboto';
+        }
+
+        img {
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        button {
+            background-color: wheat;
+            border-color: wheat;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            padding: 10px;
+            width: 100px;
+
+            font-family: 'roboto';
+        }
+
+
+        button:hover {
+            background-color: black;
+            color: white;
+        }
+
+        button:focus {
+            background-color: black;
+            color: white;
+        }
+
+    </style>
+</head>
+
+<body>
+    <article class="person">
+        <h2 class="navn"></h2>
+        <p class="køn"></p>
+        <img src="" alt="" class="profil-billede">
+    </article>
+
+    <button>Tilbage</button>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get("id");
+
+        const medieurl = "https://babushka-dd8a.restdb.io/rest/menu/media";
+        let personer;
+        const myHeaders = {
+
+            "x-apikey": "600ec2fb1346a1524ff12de4"
+        }
+
+        console.log("ID", id);
+        document.addEventListener("DOMContentLoaded", loadJSON);
+
+        async function loadJSON() {
+            const JSONData = await fetch(`https://babushka-dd8a.restdb.io/media${id}`, {
+                headers: myHeaders
+            });
+            personer = await JSONData.json();
+
+            console.log("Personer", personer);
+            visPersoner();
+        }
+
+        function visPersoner() {
+            document.querySelector(".navn").textContent = personer.fornavn + " " + personer.efternavn;
+            document.querySelector(".profil-billede").src = medieurl + personer.billede;
+            document.querySelector("button").addEventListener("click", tilbageTilPersonGalleri);
+        }
+
+        function tilbageTilPersonGalleri() {
+            history.back();
+        }
+
+    </script>
+
+</body>
+
+</html>
